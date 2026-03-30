@@ -43,7 +43,6 @@ const PosterPreview: React.FC<Props> = ({ slide, id }) => {
         {/* Logos */}
         <div className="poster-logos">
            <div className="logo-box">
-             <span>منصة المستثمر</span>
            </div>
            
            {slide.brandLogo ? (
@@ -100,16 +99,16 @@ const PosterPreview: React.FC<Props> = ({ slide, id }) => {
         {/* Specializations Section */}
         <div className="poster-specs-section">
           <div className="poster-specs-header">
-             <div 
-               className="poster-specs-divider"
-               style={{ backgroundColor: themeColors.secondary }}
-             ></div>
              <span 
                className="poster-specs-badge"
                style={{ backgroundColor: themeColors.secondary }}
              >
                التخصصات المطلوبة:
              </span>
+             <div 
+               className="poster-specs-divider"
+               style={{ backgroundColor: themeColors.secondary }}
+             ></div>
           </div>
 
           <div className="poster-specs-grid">
@@ -137,7 +136,7 @@ const PosterPreview: React.FC<Props> = ({ slide, id }) => {
         </div>
       </div>
 
-      {/* Footer Area */}
+      {/* Footer Area - 2-column RTL layout */}
       <div 
         className="poster-footer"
         style={{ 
@@ -145,55 +144,60 @@ const PosterPreview: React.FC<Props> = ({ slide, id }) => {
           borderColor: 'rgba(0,0,0,0.05)'
         }}
       >
-        <div className="poster-qr-container">
-          <div 
-            className="poster-qr-text"
-            style={{ color: themeColors.text, opacity: 0.8 }}
-          >
-            {slide.qrCodeText}
+        {/* Right Column: Duration + Incentives stacked */}
+        <div className="footer-right-col">
+          {/* 1. Duration */}
+          <div className="footer-duration-block" style={{ color: themeColors.primary }}>
+            <Clock size={18} />
+            <div className="footer-duration-text">
+              <span className="footer-duration-label">مدة التدريب:</span>
+              <span className="footer-duration-value">{slide.duration}</span>
+            </div>
           </div>
-          <div className="poster-qr-box">
-            <QrCode className="poster-qr-icon" style={{ color: themeColors.primary }} strokeWidth={1.2} />
+
+          {/* 3. Incentives */}
+          <div 
+            className="footer-incentives-block"
+            style={{ 
+              backgroundColor: themeColors.background === '#ffffff' ? 'white' : 'rgba(255,255,255,0.05)',
+              borderColor: `${themeColors.secondary}55`,
+            }}
+          >
+            <Coins size={18} style={{ color: themeColors.secondary, flexShrink: 0 }} />
+            <p className="footer-incentives-text" style={{ color: themeColors.text }}>
+              {slide.incentives}
+            </p>
           </div>
         </div>
 
-        <div className="poster-details">
-           <div className="poster-duration-row">
-             <div className="poster-duration-box" style={{ color: themeColors.primary }}>
-               <Clock className="poster-duration-icon" size={20} />
-               <div className="poster-duration-box">
-                 <span className="poster-duration-value">{slide.duration}</span>
-                 <span className="poster-duration-label">مدة التدريب:</span>
-               </div>
-             </div>
-           </div>
-           
-           <div 
-             className="poster-incentives-box"
-             style={{ 
-               backgroundColor: themeColors.background === '#ffffff' ? 'white' : 'rgba(255,255,255,0.05)',
-               borderColor: `${themeColors.secondary}44`,
-               color: themeColors.primary
-             }}
-           >
-             <p className="poster-incentives-text">
-               {slide.incentives}
-             </p>
-             <Coins size={22} style={{ color: themeColors.primary }} />
-           </div>
+        {/* Left Column: QR text + QR code stacked */}
+        <div className="footer-left-col">
+          {/* 2. QR Text */}
+          <p className="footer-qr-text" style={{ color: themeColors.text }}>
+            {slide.qrCodeText}
+          </p>
+          {/* 4. QR Code */}
+          <div className="footer-qr-box" style={{ borderColor: `${themeColors.primary}33` }}>
+            {slide.qrCodeImage ? (
+              <img src={slide.qrCodeImage} alt="QR Code" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : (
+              <QrCode style={{ color: themeColors.primary, width: '100%', height: '100%' }} strokeWidth={1.2} />
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Brand Stripe Footer (Added) */}
+      {/* Brand Stripe Footer */}
       <div 
         className="poster-brand-footer"
         style={{ 
-          backgroundColor: themeColors.background === '#ffffff' ? '#f1f5f9' : 'rgba(255, 255, 255, 0.05)',
+          backgroundColor: `${themeColors.primary}15`,
+          borderTopColor: `${themeColors.primary}22`,
           color: themeColors.text 
         }}
       >
-        <span className="left-brand">al_investor.com</span>
-        <span className="right-brand">منصة المستثمر</span>
+        <span className="right-brand">منصة المستثمر الاقتصادية</span>
+        <span className="left-brand">al-investor.com</span>
       </div>
     </div>
   );

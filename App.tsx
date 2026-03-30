@@ -3,7 +3,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { 
   Plus, Trash2, Download, Wand2, Image as ImageIcon, 
   ChevronRight, ChevronLeft, Save, PlusCircle, LayoutPanelTop,
-  Type, Palette, Code2, Sparkles, Clock, Coins, UploadCloud, CheckCircle2, Loader2
+  Type, Palette, Code2, Sparkles, Clock, Coins, UploadCloud, CheckCircle2, Loader2, QrCode
 } from 'lucide-react';
 import * as htmlToImage from 'html-to-image';
 import { CarouselSlide, Specialization, ThemeColors } from './types';
@@ -328,31 +328,8 @@ const App: React.FC = () => {
               </div>
 
               <div className="input-group">
-                <h3 className="input-label" style={{ textAlign: 'center', borderBottom: '1px solid var(--slate-800)', paddingBottom: '8px' }}>شعار الجهة (أعلى اليمين)</h3>
-                <div className="brand-logo-grid">
-                  {BRAND_LOGOS.map((logo) => (
-                    <div 
-                      key={logo.id} 
-                      className={`brand-logo-card ${currentSlide.brandLogo === logo.src ? 'active' : ''}`}
-                      onClick={() => updateSlide({ brandLogo: logo.src })}
-                    >
-                      <img src={logo.src} alt={`Logo ${logo.id}`} />
-                    </div>
-                  ))}
-                </div>
-                {currentSlide.brandLogo && (
-                  <button 
-                    className="remove-logo-btn" 
-                    onClick={() => updateSlide({ brandLogo: undefined })}
-                  >
-                    إزالة الشعار كلياً
-                  </button>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label className="input-label">الخلفية والشعار</label>
-                <div className="upload-box-container">
+                <label className="input-label">الصور (الغلاف، الشعار، الباركود)</label>
+                <div className="upload-box-container" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
                   <label className="upload-box">
                     {currentSlide.topImage && <img src={currentSlide.topImage} alt="Cover" />}
                     <div className="overlay">
@@ -368,6 +345,23 @@ const App: React.FC = () => {
                       <span>إضافة لوغو</span>
                     </div>
                     <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => handleFileChange(e, 'logoImage')} />
+                  </label>
+                  <label className="upload-box">
+                    {currentSlide.qrCodeImage && <img src={currentSlide.qrCodeImage} alt="QR" style={{ objectFit: 'contain', padding: '8px' }} />}
+                    <div className="overlay">
+                      <QrCode size={20} />
+                      <span>رفع باركود</span>
+                    </div>
+                    <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          updateSlide({ qrCodeImage: reader.result as string });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }} />
                   </label>
                 </div>
               </div>
@@ -451,7 +445,7 @@ const App: React.FC = () => {
                />
              ))}
            </div>
-           <button onClick={addSlide} className="add-button" style={{ marginLeft: '8px' }}><PlusCircle size={20}/></button>
+           <button onClick={addSlide} className="add-button" style={{ marginInlineStart: '8px' }}><PlusCircle size={20}/></button>
            <button disabled={activeSlideIndex === slides.length - 1} onClick={() => setActiveSlideIndex(activeSlideIndex + 1)} className="pagination-nav-btn"><ChevronLeft /></button>
         </div>
 
